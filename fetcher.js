@@ -1,6 +1,6 @@
 const request = require('request');
-const fs = require('fs');
 
+const fs = require('fs');
 
 let args = process.argv;
 args = args.splice(2);
@@ -34,12 +34,24 @@ request(urlToGet, (error, response, body) => {
   console.log('REQUEST error:', error); // Print the error if one occurred
   console.log('REQUEST statusCode:', response && response.statusCode); // Print the response status code if a response was received
   console.log('REQUEST body:', body); // Print the HTML the page.
+
+  // let fileDescrip;
+
+  // HAPPY PATH
+
+  fs.writeFile(localPathToSave, body, function(err) {
+    //console.log(body);
+    if(err) {
+        return console.log('err: ', err);
+    } else {
+
+      const stats = fs.statSync(localPathToSave);
+      const fileSizeInBytes = stats["size"];
+      return console.log('Downloaded and saved ' + fileSizeInBytes + ' bytes to ' + localPathToSave);
+    }
+  }); 
 });
   
-  // //MENTOR: do I pass the body?
-  // write(localPathToSave, body, err => {
-  //   console.log('writing ', localPathtoSave, body);
-  // });
 
 // parse out content-length for size
 
